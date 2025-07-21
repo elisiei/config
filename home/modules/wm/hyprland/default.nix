@@ -1,0 +1,159 @@
+{ pkgs, ... }:
+
+let
+  wallpaperScript = pkgs.writeShellScriptBin "random-wallpaper" ''
+    pkill swaybg 2>/dev/null || true
+    WALP=$(find "$HOME/Pictures/wallpapers" -type f \( -iname "*.jpg" -o -iname "*.png" \) | shuf -n 1)
+    [ -n "$WALP" ] && ${pkgs.swaybg}/bin/swaybg -i "$WALP" --mode fill
+  '';
+  startupScript = pkgs.writeShellScriptBin "start" ''
+    ${wallpaperScript}/bin/random-wallpaper
+  '';
+in
+{
+  home.packages = [ wallpaperScript ];
+
+  wayland.windowManager.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+    settings = {
+      monitor = [
+        ",1920x1080,auto,1,bitdepth,8"
+        ",preferred,auto,1,mirror,eDP-1,bitdepth,8"
+      ];
+
+      xwayland = {
+        force_zero_scaling = "true";
+      };
+
+      "$term" = "alacritty";
+      "$browser" = "zen";
+      "$menu" = "wofi --show drun";
+      "$discord" = "discord";
+
+      exec-once = [ "${startupScript}/bin/start" ];
+
+      env = [
+        "XCURSOR_THEME,Bibata-Modern-Ice"
+        "XCURSOR_SIZE,20"
+      ];
+
+      general = {
+        gaps_in = "0";
+        gaps_out = "15";
+        border_size = "1";
+        "col.active_border" = "rgba(0,0,0,0)";
+        "col.inactive_border" = "rgba(0,0,0,0)";
+        resize_on_border = "false";
+        allow_tearing = "false";
+        layout = "dwindle";
+      };
+
+      debug = {
+        disable_logs = false;
+      };
+
+      decoration = {
+        rounding = "0";
+        active_opacity = "0.95";
+        inactive_opacity = "0.8";
+        shadow.enabled = false;
+        blur = {
+          enabled = true;
+          xray = false;
+          special = true;
+          new_optimizations = true;
+          size = 10;
+          passes = 3;
+          brightness = 0.9;
+          noise = 2.0e-2;
+          contrast = 1.1;
+          popups = true;
+          popups_ignorealpha = 0.5;
+
+          # Experimental tweaks (if supported by your Hyprland version)
+          vibrancy = 0.2;
+          vibrancy_darkness = 0.1;
+        };
+      };
+
+      animations = {
+        enabled = "true";
+        bezier = "myBezier, 0.05, 0.9, 0.1, 1.05";
+        animation = [
+          "windows, 1, 7, myBezier"
+          "windowsOut, 1, 7, default, popin 80%"
+          "fade, 1, 7, default"
+          "workspaces, 1, 6, default"
+        ];
+      };
+
+      misc = {
+        force_default_wallpaper = "0";
+        disable_hyprland_logo = "true";
+        middle_click_paste = "false";
+        vfr = "true";
+      };
+
+      gestures.workspace_swipe = "false";
+
+      device = {
+        name = "epic-mouse-v1";
+        sensitivity = "-0.5";
+      };
+
+      "$mainMod" = "SUPER";
+
+      bind = [
+        "$mainMod SHIFT, PRINT, exec, nu ~/scripts/tixte" # whole screen
+        "$mainMod, PRINT, exec, nu ~/scripts/tixte --area" # selection
+        "$mainMod, SPACE, exec, $menu"
+        "$mainMod, S, pin"
+        "$mainMod, T, exec, $term"
+        "$mainMod, Z, exec, $browser"
+        "$mainMod, D, exec, $discord"
+        "$mainMod, Q, killactive"
+        "$mainMod, W, exec, random-wallpaper"
+        "$mainMod SHIFT, M, exit"
+        "$mainMod, V, togglefloating"
+        "$mainMod, left, movefocus, l"
+        "$mainMod, right, movefocus, r"
+        "$mainMod, up, movefocus, u"
+        "$mainMod, down, movefocus, d"
+        "$mainMod, 1, workspace, 1"
+        "$mainMod, 2, workspace, 2"
+        "$mainMod, 3, workspace, 3"
+        "$mainMod, 4, workspace, 4"
+        "$mainMod, 5, workspace, 5"
+        "$mainMod, 6, workspace, 6"
+        "$mainMod, 7, workspace, 7"
+        "$mainMod, 8, workspace, 8"
+        "$mainMod, 9, workspace, 9"
+        "$mainMod, 0, workspace, 10"
+        "$mainMod SHIFT, 1, movetoworkspace, 1"
+        "$mainMod SHIFT, 2, movetoworkspace, 2"
+        "$mainMod SHIFT, 3, movetoworkspace, 3"
+        "$mainMod SHIFT, 4, movetoworkspace, 4"
+        "$mainMod SHIFT, 5, movetoworkspace, 5"
+        "$mainMod SHIFT, 6, movetoworkspace, 6"
+        "$mainMod SHIFT, 7, movetoworkspace, 7"
+        "$mainMod SHIFT, 8, movetoworkspace, 8"
+        "$mainMod SHIFT, 9, movetoworkspace, 9"
+        "$mainMod SHIFT, 0, movetoworkspace, 10"
+      ];
+
+      input = {
+        kb_layout = "es,ru";
+        kb_options = "grp:alt_space_toggle";
+        numlock_by_default = true;
+      };
+
+      bindm = [
+        "$mainMod, mouse:272, movewindow"
+        "$mainMod, mouse:273, resizewindow"
+      ];
+
+      windowrulev2 = "suppressevent maximize, class:.*";
+    };
+  };
+}
