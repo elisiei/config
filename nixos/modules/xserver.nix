@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 {
   services.xserver.enable = true;
   services.xserver.videoDrivers = [ "nvidia" ];
@@ -20,23 +20,28 @@
   };
 
   services.xserver.xkb = {
-    layout = "es";
+    layout = "es,ru";
     variant = "";
+  };
+
+  services.greetd = {
+    enable = true;
+    settings = rec {
+      initial_session = {
+        command = "${pkgs.sway}/bin/sway --unsupported-gpu";
+        user = "elisiei";
+      };
+      default_session = initial_session;
+    };
   };
 
   console.keyMap = "es";
 
-  services.displayManager.sddm.enable = true;
-  services.displayManager.defaultSession = "hyprland-uwsm";
-  services.displayManager.autoLogin.enable = true;
-  services.displayManager.autoLogin.user = "elisiei";
-  services.displayManager.sddm.wayland.enable = true;
-
-  environment.etc."xdg/sessions/hyprland.desktop".text = ''
-    [Desktop Entry]
-    Name=Hyprland
-    Comment=Hyprland Wayland Compositor
-    Exec=Hyprland
-    Type=Application
-  '';
+  #environment.etc."xdg/sessions/hyprland.desktop".text = ''
+  #  [Desktop Entry]
+  #  Name=Hyprland
+  #  Comment=Hyprland Wayland Compositor
+  #  Exec=Hyprland
+  #  Type=Application
+  #'';
 }

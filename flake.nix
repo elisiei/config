@@ -2,15 +2,15 @@
   description = "Modular and minimalist NixOS configuration";
 
   inputs = {
-    # Nixos
+    # nixos
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Spotify
+    # spotify
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
 
-    # Nvim
+    # nvim
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
