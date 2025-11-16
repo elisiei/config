@@ -3,7 +3,8 @@
     ./packages.nix
 
     # hyprland
-    ./modules/hyprland/default.nix
+    # ./modules/hyprland/default.nix
+    ./modules/wm/sway/default.nix
 
     # editors
     ./modules/ide/nvim/default.nix

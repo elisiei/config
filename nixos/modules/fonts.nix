@@ -9,10 +9,11 @@
       nerd-fonts.jetbrains-mono
       maple-mono.NF
     ];
+
     fontconfig.defaultFonts = {
-      serif = [ "Noto Nerd Font" ];
-      sansSerif = [ "Noto Nerd Font" ];
-      monospace = [ "Noto Nerd Font" ];
+      serif = [ "Maple Mono NF" ];
+      sansSerif = [ "Maple Mono NF" ];
+      monospace = [ "Maple Mono NF" ];
     };
   };
 }
