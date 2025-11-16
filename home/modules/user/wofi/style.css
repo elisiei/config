@@ -1,0 +1,35 @@
+window {
+	background-color: #1a1b26;
+	border: none;
+}
+
+#input {
+	padding: 0.6em 0.8em;
+	background-color: #24283b;
+	color: #c0caf5;
+	border: none;
+	font-size: 14px;
+}
+
+#entry {
+	padding: 0.6em 0.8em;
+	color: #c0caf5;
+	background: transparent;
+	border: none;
+	font-size: 14px;
+}
+
+#entry:selected {
+	background-color: #7aa2f7;
+	color: #1a1b26;
+	font-weight: bold;
+}
+
+#text {
+	color: inherit;
+}
+
+#text:selected {
+	color: #1a1b26;
+	font-weight: bold;
+}
